@@ -8,14 +8,17 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
 @Configuration
-public class ProjectConfig implements WebMvcConfigurer{
-    
+public class ProjectConfig implements WebMvcConfigurer {
+
     @Override
-    public void addViewControllers(ViewControllerRegistry registro){
+    public void addViewControllers(ViewControllerRegistry registro) {
         registro.addViewController("/").setViewName("index");
         registro.addViewController("/ejemplo2").setViewName("ejemplo2");
+        registro.addViewController("/multimedia").setViewName("multimedia");
+        registro.addViewController("/iframes").setViewName("iframes");
+
     }
-    
+
     /* El siguiente método se utilizar para publicar en la nube, independientemente  */
     @Bean
     public SpringResourceTemplateResolver templateResolver_0() {
@@ -27,5 +30,5 @@ public class ProjectConfig implements WebMvcConfigurer{
         resolver.setCheckExistence(true);
         return resolver;
     }
-    
+
 }
