@@ -26,7 +26,7 @@ public class CategoriaService {
 
         return lista;
     }
-    
+
     @Transactional(readOnly = true)
     public Categoria getCategorias(Categoria categoria) {
         return categoriaRepository.findById(categoria.getIdCategoria()).orElse(null);
@@ -37,11 +37,16 @@ public class CategoriaService {
     public void save(Categoria categoria) {
         categoriaRepository.save(categoria);
     }
-    
+
     @Transactional
-    public void delete(Categoria categoria) {
-        categoriaRepository.delete(categoria);
+    public boolean delete(Categoria categoria) {
+        try {
+            categoriaRepository.delete(categoria);
+            categoriaRepository.flush();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
-    
-    
+
 }
