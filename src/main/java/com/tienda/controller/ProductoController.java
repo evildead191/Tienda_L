@@ -2,6 +2,7 @@ package com.tienda.controller;
 
 import com.google.firebase.messaging.Message;
 import com.tienda.domain.Producto;
+import com.tienda.service.CategoriaService;
 import com.tienda.service.ProductoService;
 import com.tienda.service.FirebaseStorageService;
 import java.util.Locale;
@@ -22,12 +23,15 @@ public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
+    @Autowired
+    private CategoriaService categoriaService;
 
     @GetMapping("/listado")
     public String listado(Model model) {
         var lista = productoService.getProductos(false);
-
         model.addAttribute("productos", lista);
+        var categorias = categoriaService.getCategorias(false);
+        model.addAttribute("categorias", categorias);
 
         return "/producto/listado";
     }
@@ -62,7 +66,7 @@ public class ProductoController {
             redirectAttributes.addFlashAttribute("error", messageSource.getMessage("producto.error02", null, Locale.getDefault()));
         } else if (productoService.delete(producto)) {
             redirectAttributes.addFlashAttribute("todoOk", messageSource.getMessage("mensaje.eliminado", null, Locale.getDefault()));
-        } else  {
+        } else {
             redirectAttributes.addFlashAttribute("error", messageSource.getMessage("producto.error03", null, Locale.getDefault()));
         }
         productoService.delete(producto);
@@ -70,9 +74,11 @@ public class ProductoController {
 
     }
 
-    @GetMapping("/modificar/{idProducto}")
+    @PostMapping("/modificar")
     public String modificar(Producto producto, Model model) {
         producto = productoService.getProductos(producto);
+        var categorias = categoriaService.getCategorias(false);
+        model.addAttribute("categorias", categorias);
         model.addAttribute("producto", producto);
         return "/producto/modifica";
     }

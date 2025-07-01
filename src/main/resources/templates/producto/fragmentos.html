@@ -37,8 +37,35 @@
                               enctype="multipart/form-data">
                             <div class="modal-body">
                                 <div class="mb-3">
+                                    <label>[[#{producto.categoria}]]</label>
+                                    <select class="form-select" 
+                                            name="categoria.idCategoria"
+                                            required="true"
+                                            aria-label="Default select example">
+                                        <option th:each="c : ${categorias}"
+                                                th:value="${c.idCategoria}">[[${c.descripcion}]]</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
                                     <label>[[#{producto.descripcion}]]</label>
                                     <input type="text" name="descripcion" 
+                                           required="true" class="form-control"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{producto.detalle}]]</label>
+                                    <textarea name="detalle" rows="5"
+                                              class="form-control"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{producto.precio}]]</label>
+                                    <input type="number" name="precio" 
+                                           min="0"
+                                           required="true" class="form-control"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{producto.existencias}]]</label>
+                                    <input type="number" name="existencias" 
+                                           min="0"
                                            required="true" class="form-control"/>
                                 </div>
                                 <div class="mb-3">
@@ -80,30 +107,46 @@
                                         <tr>
                                             <th>#</th>
                                             <th>[[#{producto.descripcion}]]</th>
+                                            <th>[[#{producto.precio}]]</th>
+                                            <th>[[#{producto.existencias}]]</th>
+                                            <th>[[#{producto.total}]]</th>
+                                            <th>[[#{producto.categoria}]]</th>
                                             <th>[[#{producto.imagen}]]</th>
                                             <th>[[#{producto.activo}]]</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="c : ${productos}">
-                                            <td>[[${c.idProducto}]]</td>
-                                            <td>[[${c.descripcion}]]</td>
-                                            <td><img th:src="@{${c.rutaImagen}}" alt=".." height="75"/></td>
-                                            <td th:text="${c.activo} ? 'Activa' : 'Inactiva'"></td>
+                                        <tr th:each="p : ${productos}">
+                                            <td>[[${p.idProducto}]]</td>
+                                            <td>[[${p.descripcion}]]</td>
+                                            <td>[[${p.precio}]]</td>
+                                            <td>[[${p.existencias}]]</td>
+                                            <td>[[${p.precio}*${p.existencias}]]</td>
+                                            <td>[[${p.categoria.descripcion}]]</td>
+                                            <td><img th:src="@{${p.rutaImagen}}" alt=".." height="75"/></td>
+                                            <td th:text="${p.activo} ? 'Activa' : 'Inactiva'"></td>
                                             <td>
-                                                <button type="button"
-                                                        class="btn btn-danger"
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#confirmModal"
-                                                        th:data-bs-id="${c.idProducto}"
-                                                        th:data-bs-descripcion="${c.descripcion}">
-                                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
-                                                </button>
+                                                <div class="d-flex align-items-start">
+                                                    <button type="button"
+                                                            class="btn btn-danger"
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#confirmModal"
+                                                            th:data-bs-id="${p.idProducto}"
+                                                            th:data-bs-descripcion="${p.descripcion}">
+                                                        <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                                    </button>
 
-                                                <a class='btn btn-success'
-                                                   th:href='@{/producto/modificar/}+${c.idProducto}'>
-                                                    <i class="fa-solid fa-pencil"></i> [[#{accion.actualizar}]]
-                                                </a>
+                                                    <form method="post"
+                                                          th:action="@{/producto/modificar}"
+                                                          th:object="${producto}">
+                                                        <input type="hidden" name="idProducto"
+                                                               th:value="${p.idProducto}"/>
+                                                        <button type="submit"
+                                                                class="btn btn-success">
+                                                            <i class="fa-solid fa-pencil"></i> [[#{accion.actualizar}]]
+                                                        </button>
+                                                    </form> 
+                                                </div>
 
                                             </td>
                                         </tr>
@@ -138,12 +181,7 @@
                                         <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
                                     </a>
                                 </div>
-                                <div class="col-md-4 d-grid">                                
-                                    <a th:href="@{/producto/eliminar/}+${producto.idProducto}"
-                                       class="btn btn-danger">
-                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
-                                    </a>
-                                </div>
+
                                 <div class="col-md-4 d-grid">
                                     <button type="submit" class="btn btn-success">
                                         <i class="fas fa-check"></i> [[#{accion.guardar}]]
@@ -161,9 +199,37 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="mb-3">
+                                                    <label>[[#{producto.categoria}]]</label>
+                                                    <select class="form-select" 
+                                                            name="categoria.idCategoria"
+                                                            th:field="*{categoria.idCategoria}"
+                                                            required="true"
+                                                            aria-label="Default select example">
+                                                        <option th:each="c : ${categorias}"
+                                                                th:value="${c.idCategoria}">[[${c.descripcion}]]</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
                                                     <label for="descripcion">[[#{producto.descripcion}]]</label>
                                                     <input type="text" class="form-control" 
                                                            name="descripcion" th:field="*{descripcion}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>[[#{producto.detalle}]]</label>
+                                                    <textarea class="form-control" 
+                                                              name="detalle" th:field="*{detalle}"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>[[#{producto.precio}]]</label>
+                                                    <input type="number" class="form-control" 
+                                                           name="precio" th:field="*{precio}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>[[#{producto.existencias}]]</label>
+                                                    <input type="number" class="form-control" 
+                                                           name="existencias" th:field="*{existencias}"
                                                            required="true">
                                                 </div>
                                                 <div class="mb-3">

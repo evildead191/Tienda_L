@@ -62,7 +62,7 @@ public class CategoriaController {
             redirectAttributes.addFlashAttribute("error", messageSource.getMessage("categoria.error02", null, Locale.getDefault()));
         } else if (categoriaService.delete(categoria)) {
             redirectAttributes.addFlashAttribute("todoOk", messageSource.getMessage("mensaje.eliminado", null, Locale.getDefault()));
-        } else  {
+        } else {
             redirectAttributes.addFlashAttribute("error", messageSource.getMessage("categoria.error03", null, Locale.getDefault()));
         }
         categoriaService.delete(categoria);
@@ -70,7 +70,7 @@ public class CategoriaController {
 
     }
 
-    @GetMapping("/modificar/{idCategoria}")
+    @PostMapping("/modificar")
     public String modificar(Categoria categoria, Model model) {
         categoria = categoriaService.getCategorias(categoria);
         model.addAttribute("categoria", categoria);
