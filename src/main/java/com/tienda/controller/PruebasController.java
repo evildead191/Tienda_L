@@ -35,26 +35,26 @@ public class PruebasController {
         model.addAttribute("categorias", categorias);
         return "/pruebas/listado";
     }
-    
+
     @GetMapping("/listado/{idCategoria}")
     public String listado(Categoria categoria, Model model) {
-        categoria=categoriaService.getCategorias(categoria);
+        categoria = categoriaService.getCategorias(categoria);
         model.addAttribute("productos", categoria.getProductos());
         var categorias = categoriaService.getCategorias(false);
         model.addAttribute("categorias", categorias);
 
         return "/pruebas/listado";
     }
-    
+
     @GetMapping("/listado2")
     public String listado2(Model model) {
         var lista = productoService.getProductos(false);
         model.addAttribute("productos", lista);
         return "/pruebas/listado2";
     }
-    
+
     @PostMapping("/query1")
-    public String consulta1(@RequestParam() double precioInf, 
+    public String consulta1(@RequestParam() double precioInf,
             @RequestParam() double precioSup, Model model) {
         var lista = productoService.query1(precioInf, precioSup);
         model.addAttribute("productos", lista);
@@ -62,8 +62,9 @@ public class PruebasController {
         model.addAttribute("precioSup", precioSup);
         return "/pruebas/listado2";
     }
+
     @PostMapping("/query2")
-    public String consulta2(@RequestParam() double precioInf, 
+    public String consulta2(@RequestParam() double precioInf,
             @RequestParam() double precioSup, Model model) {
         var lista = productoService.query2(precioInf, precioSup);
         model.addAttribute("productos", lista);
@@ -71,8 +72,9 @@ public class PruebasController {
         model.addAttribute("precioSup", precioSup);
         return "/pruebas/listado2";
     }
+
     @PostMapping("/query3")
-    public String consulta3(@RequestParam() double precioInf, 
+    public String consulta3(@RequestParam() double precioInf,
             @RequestParam() double precioSup, Model model) {
         var lista = productoService.query3(precioInf, precioSup);
         model.addAttribute("productos", lista);
@@ -80,4 +82,13 @@ public class PruebasController {
         model.addAttribute("precioSup", precioSup);
         return "/pruebas/listado2";
     }
+
+    @PostMapping("/pruebas/queryNombre")
+    public String consultaPorNombre(@RequestParam("nombre") String nombre, Model model) {
+        var productos = productoService.getProductosPorNombre(nombre);
+        model.addAttribute("productos", productos);
+        model.addAttribute("nombre", nombre);
+        return "/pruebas/listado2";
+    }
+
 }
