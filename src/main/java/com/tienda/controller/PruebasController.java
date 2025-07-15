@@ -83,7 +83,7 @@ public class PruebasController {
         return "/pruebas/listado2";
     }
 
-    @PostMapping("/pruebas/queryNombre")
+    @PostMapping("/queryNombre")
     public String consultaPorNombre(@RequestParam("nombre") String nombre, Model model) {
         var productos = productoService.getProductosPorNombre(nombre);
         model.addAttribute("productos", productos);
