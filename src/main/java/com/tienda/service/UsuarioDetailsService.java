@@ -2,7 +2,6 @@ package com.tienda.service;
 
 import com.tienda.domain.Rol;
 import com.tienda.domain.Usuario;
-import com.tienda.repository.RolRepository;
 import com.tienda.repository.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
